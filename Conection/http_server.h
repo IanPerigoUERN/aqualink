@@ -7,7 +7,7 @@
 
 // Definindo o pino do LED
 
-#define API_KEY "HHN5DZPDF459VX1E" // Substitua pela sua chave de API do ThingSpeak
+#define API_KEY "" // Substitua pela sua chave de API do ThingSpeak
 #define THINGSPEAK_HOST "api.thingspeak.com"
 #define THINGSPEAK_PORT 80
 
