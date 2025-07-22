@@ -36,7 +36,7 @@ pico_sdk_init()
 # Add executable. Default name is the project name, version 0.1
 
 add_executable(aqualink aqualink.c Conection/http_server.c Display/display.c Display/Display1306/ssd1306_i2c.c Joystick/joystick.c RGB/led.c Global/global.c
-LedMatrix/matriz.c Buzzer/buzzer.c Temperature/temp.c)
+LedMatrix/matriz.c Buzzer/buzzer.c Temperature/temp.c Conection/mqtt_comm.c)
 
 
 # Generate PIO header
@@ -55,7 +55,8 @@ target_link_libraries(aqualink
         hardware_adc
         hardware_pwm
         hardware_gpio
-        hardware_i2c)
+        hardware_i2c
+        )
 
 # Add the standard include files to the build
 target_include_directories(aqualink PRIVATE
@@ -71,6 +72,7 @@ target_link_libraries(aqualink
         hardware_pwm
         hardware_gpio
         pico_multicore
+        pico_lwip_mqtt
         )
 
 pico_add_extra_outputs(aqualink)

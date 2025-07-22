@@ -45,6 +45,17 @@
 #include "Button/button.h"
 #include "Buzzer/buzzer.h"
 
+
+
+// MQTT
+
+#include "Conection/mqtt_comm.h"
+#include "lwip/apps/mqtt.h"       // Biblioteca MQTT do lwIP
+
+// Base: https://github.com/BitDogLab/BitDogLab-C/blob/main/wifi_button_and_led/lwipopts.h
+#include "lwipopts.h"             // Configurações customizadas do lwIP
+
+
 //Uso futuro para simular um super  aquecimento do sistema ou pico de tensão
 //#include "Temperature/temp.h"
 //#include "Mic/mic.h"

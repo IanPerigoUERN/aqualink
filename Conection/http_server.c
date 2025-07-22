@@ -4,6 +4,9 @@ static struct tcp_pcb *pcb;  // ponteiro para a estrutura de controle de bloco T
 
 
 bool erro_dns = false;  // Indica se houve um erro na resolução de DNS
+static bool dnsResolved = false;
+//static ip_addr_t IP_DO_BROKER;
+/*
 err_t callback_envio_tcp(void *arg, struct tcp_pcb *tpcb, u16_t len) { // Callback chamado quando os dados são enviados com sucesso
     printf("Dados enviados com sucesso!\n");
     return ERR_OK;
@@ -31,7 +34,7 @@ err_t callback_conexao_tcp(void *arg, struct tcp_pcb *tpcb, err_t err) { // Call
     }
     return ERR_OK;
 }
-
+*/
 void my_dns_found_callback(const char *name, const ip_addr_t *ipaddr, void *arg) { // Callback chamado quando a resolução de DNS é concluída
 
     if (ipaddr) {// Verifica se o endereço IP foi resolvido com sucesso
@@ -61,8 +64,9 @@ bool conexao_wifi(uint32_t timeout_ms) {// Função para conectar ao Wi-Fi
     
     // Tenta conectar enquanto não exceder o tempo limite
     while ((time_us_64() - start) < (timeout_ms * 1000)) {
-        if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASS, CYW43_AUTH_WPA2_AES_PSK, 10000) == 0) {
+        if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID,WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 10000) == 0) {
             conectado = true;
+            mqtt_setup(NOME_DO_DISPOSITIVO, IP_DO_BROKER, USER_DO_BROKER, SENHA_DO_BROKER);
             break;
         }
         printf("Falha ao conectar ao Wi‑Fi, tentando novamente...\n");
@@ -77,33 +81,47 @@ bool conexao_wifi(uint32_t timeout_ms) {// Função para conectar ao Wi-Fi
 }
 
 
-static bool dnsResolved = false;  // Flag para indicar que o DNS foi resolvido
 
-// Função wrapper para a callback, que atualiza a flag e chama a callback original
-static void my_dns_callback_wrapper(const char *name, const ip_addr_t *ipaddr, void *arg) {
-    dnsResolved = true;  // Indica que a resolução foi concluída
-    my_dns_found_callback(name, ipaddr, arg);  // Chama a callback original
+
+
+
+/*
+
+// ...existing code...
+static ip_addr_t broker_ip_addr;
+void my_dns_callback_wrapper(const char *name, const ip_addr_t *ipaddr, void *callback_arg) {
+    if (ipaddr) {
+        broker_ip_addr = *ipaddr;  // Usando o novo nome
+        dnsResolved = true;
+        printf("DNS resolvido: %s -> %s\n", name, ipaddr_ntoa(ipaddr));
+    } else {
+        printf("Falha na resolução DNS para %s\n", name);
+        dnsResolved = false;
+    }
 }
 
-// Função que realiza a conexão via Wi-Fi e a resolução DNS para o ThingSpeak
 void conectar_thingspeak_service(void) {
-    printf("Iniciando conexão com o ThingSpeak...\n");
+    printf("Iniciando conexão com o Broker...\n");
 
-    // Conecta ao Wi-Fi
-    //conexao_wifi();
-
-    // Inicia a resolução DNS para o hostname do ThingSpeak
     ip_addr_t server_ip;
-    err_t err = dns_gethostbyname(THINGSPEAK_HOST, &server_ip, my_dns_callback_wrapper, NULL);
+    err_t err = dns_gethostbyname(DNS_BROKER, &server_ip, my_dns_callback_wrapper, NULL);
 
     if (err == ERR_OK) {
-        // Resolução imediata; chama a callback manualmente
-        my_dns_callback_wrapper(THINGSPEAK_HOST, &server_ip, NULL);
+        // Resolução imediata
+        my_dns_callback_wrapper(DNS_BROKER, &server_ip, NULL);
     } else if (err != ERR_INPROGRESS) {
         printf("Erro ao iniciar a resolução DNS: %d\n", err);
         return;
     }
 
-  
-}
+    // Aguarda a resolução do DNS
+    while (!dnsResolved) {
+        sleep_ms(100);
+    }
 
+    // Converte ip_addr_t para string e conecta ao Broker MQTT
+    char broker_ip_str[16];
+    snprintf(broker_ip_str, sizeof(broker_ip_str), "%s", ipaddr_ntoa(&broker_ip_addr));
+    mqtt_setup(NOME_DO_DISPOSITIVO, broker_ip_str, USER_DO_BROKER, SENHA_DO_BROKER);
+}
+*/

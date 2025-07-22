@@ -37,18 +37,12 @@ int main() {
         DisplayLogo();
     }
     
-    uint64_t last_thingspeak_update = time_us_64();
+        
     
     while(true) {
         
         update_poco_level(); // Atualiza os níveis do poço e aciona o buzzer
-        
-        // Tenta enviar para o ThingSpeak a cada 10 segundos (thing só aceita a cada 15 segundos, mas nesse frequencia ficou o mais rápido que consegui)
-        if((time_us_64() - last_thingspeak_update) >= 10000000) {
-            conectar_thingspeak_service();
-            last_thingspeak_update = time_us_64();
-        }
-        
-        sleep_ms(50);
+        //conectar_thingspeak_service(); // Conecta ao serviço ThingSpeak
+        mqtt_comm_publish(CANAL_DO_BROKER, (const uint8_t *)&poco_volume, sizeof(poco_volume));
     }
 }
