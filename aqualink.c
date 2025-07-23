@@ -41,8 +41,9 @@ int main() {
     
     while(true) {
         
-        update_poco_level(); // Atualiza os níveis do poço e aciona o buzzer
-        //conectar_thingspeak_service(); // Conecta ao serviço ThingSpeak
-        mqtt_comm_publish(CANAL_DO_BROKER, (const uint8_t *)&poco_volume, sizeof(poco_volume));
+        //update_poco_level(); // Atualiza os níveis do poço e aciona o buzzer
+        MQTT_BROKER(); // Conecta ao broker MQTT
+        MQTT_PUBLISHER(); // Publica os dados no broker MQTT
+        
     }
 }

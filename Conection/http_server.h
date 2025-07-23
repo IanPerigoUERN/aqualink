@@ -22,7 +22,18 @@ void my_dns_found_callback(const char *name, const ip_addr_t *ipaddr, void *arg)
 void conectar_thingspeak_service(void);
 void thingspeak_update_loop(void);
 
+
+
+
+
 bool conexao_wifi();
+bool MQTT_BROKER();
+
+bool MQTT_PUBLISHER();
+
+
+
+
 
 ///Variáveis passadas para o thingspeak
 extern volatile float poco_volume;

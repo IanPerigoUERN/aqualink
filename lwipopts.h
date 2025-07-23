@@ -86,4 +86,20 @@
 #define SLIP_DEBUG                  LWIP_DBG_OFF
 #define DHCP_DEBUG                  LWIP_DBG_OFF
 
+
+// Permitindo conexão MQTT código de Yuri
+#define LWIP_TIMERS 1
+#define LWIP_TIMERS_CUSTOM 0
+#define MEMP_NUM_MQTT_CLIENTS 4
+#define MQTT_REQ_MAX_IN_FLIGHT 4
+#define MQTT_CYCLIC_TIMER_INTERVAL 500
+#define TCP_LISTEN_BACKLOG 1
+
+#define MEMP_NUM_SYS_TIMEOUT 16
+#define MEMP_NUM_NETCONN 8
+#define MEMP_NUM_NETBUF 8
+
+
+
+
 #endif /* __LWIPOPTS_H__ */
