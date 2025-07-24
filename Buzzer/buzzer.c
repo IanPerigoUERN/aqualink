@@ -2,6 +2,7 @@
 #include "buzzer.h"
 
 
+volatile bool bomba_ligada; // Variável global para o estado da bomba
 
 void pwm_init_buzzer(uint pin) {
     gpio_set_function(pin, GPIO_FUNC_PWM);
@@ -30,7 +31,7 @@ void beep(uint pin, uint duration_ms) {
     sleep_ms(100); // Pausa de 100ms
 }
 
-void update_buzzer(bool bomba_ligada, bool sys_state) {
+void update_buzzer(volatile bool bomba_ligada, bool sys_state) {
     if (bomba_ligada && sys_state){
     //  gpio_put(BUZZER_PIN, true); // Liga o buzzer
     pwm_set_gpio_level(BUZZER_PIN, 2048);

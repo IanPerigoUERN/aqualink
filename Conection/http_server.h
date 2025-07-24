@@ -41,5 +41,6 @@ extern volatile float caixa_volume;
 extern volatile uint8_t thingspeak_percent;
 extern volatile uint8_t thingspeak_batt_state;
 extern volatile uint8_t thingspeak_pump_state;
+extern volatile bool bomba_ligada; // Variável global para o estado da bomba
 
 #endif // HTTP_SERVER_H

@@ -54,7 +54,7 @@ void setup_joystick_interrupt() {
 }
 
 bool system_state = false;
-volatile bool bomba_ligada = false;
+//volatile bool bomba_ligada = false;
 //volatile bool pump_state = false;
 // RGB
 

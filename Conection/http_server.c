@@ -32,7 +32,7 @@ bool conexao_wifi(uint32_t timeout_ms) {// Função para conectar ao Wi-Fi
  
 bool MQTT_BROKER(uint32_t timeout_ms ) {
     
-   while (conectado && !mqtt_status) {
+   if (conectado && !mqtt_status) {
     printf("Conectando ao Broker MQTT...\n");
     mqtt_setup(NOME_DO_DISPOSITIVO, IP_DO_BROKER, USER_DO_BROKER, SENHA_DO_BROKER);
     sleep_ms(5000);
@@ -44,7 +44,7 @@ bool MQTT_BROKER(uint32_t timeout_ms ) {
         } else{
             printf("Cliente não conectado");
             sleep_ms(2000);
-            continue;    
+            return !mqtt_status;    
         }
 
     }
@@ -52,25 +52,22 @@ bool MQTT_BROKER(uint32_t timeout_ms ) {
 
 
    bool MQTT_PUBLISHER() {
-     char mensagem[100];
-    bool sucesso = false;
+     char payload[256];  // espaço suficiente para o JSON
+     bool sucesso = false;
 
-    // Converte o float para string antes de publicar
-    snprintf(mensagem, sizeof(mensagem), "%.2f", poco_volume);  // por exemplo: "12.34"
-
-    // Verifica se estamos conectados antes de tentar publicar
-    while (mqtt_status) {
-        sucesso = mqtt_comm_publish(CANAL_DO_BROKER, (const uint8_t *)mensagem, strlen(mensagem));
-        sleep_ms(20000);
-        if (sucesso) {
-            printf("Dados publicados com sucesso!\n");
-            return true;
-        } else {
-            printf("Falha ao publicar dados. Tentando novamente...\n");
-            sleep_ms(10000); // Espera 10 segundos antes de tentar novamente
-        }
-    }
-    return false;
+    // Monta o JSON com os dados formatados
+    snprintf(payload, sizeof(payload),
+        "{ \"poco_volume\": %.2f, \"caixa_volume\": %.2f, \"Painéis Solares\": %d, \"bateria\": %d, \"bomba_ligada\": %d }",
+        poco_volume,
+        caixa_volume,
+        thingspeak_percent,
+        thingspeak_batt_state,
+        bomba_ligada  
+        
+    );
+        
+    sucesso = mqtt_comm_publish(CANAL_DO_BROKER, (const uint8_t *)payload, strlen(payload));
+    sleep_ms(5000);    
 }
     
 /*

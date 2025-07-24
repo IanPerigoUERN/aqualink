@@ -12,6 +12,6 @@ void setup_joystick_interrupt();
 
 
 extern bool system_state;
-extern volatile bool bomba_ligada;
+//extern volatile bool bomba_ligada;
 
 #endif

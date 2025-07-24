@@ -7,7 +7,8 @@
 #define BUZZER_PIN 21
 #define BUZZER_FREQUENCY 200
 void pwm_init_buzzer(uint pin);
-void update_buzzer(bool pump_state, bool sys_state);
+void update_buzzer(bool bomba_ligada, bool sys_state);
+
 
 
 #endif
