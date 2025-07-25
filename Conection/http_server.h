@@ -26,8 +26,8 @@ void thingspeak_update_loop(void);
 
 
 
-bool conexao_wifi();
-bool MQTT_BROKER();
+ bool conexao_wifi();
+ bool MQTT_BROKER();
 
 bool MQTT_PUBLISHER();
 

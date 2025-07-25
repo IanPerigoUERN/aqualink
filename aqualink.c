@@ -41,7 +41,7 @@ int main() {
     
     while(true) {
         
-       
+        resolve_and_connect();
         MQTT_BROKER(); // Conecta ao broker MQTT
         MQTT_PUBLISHER(); // Publica os dados no broker MQTT
         update_poco_level(); // Atualiza os níveis do poço e aciona o buzzer
